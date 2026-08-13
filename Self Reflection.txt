@@ -1,0 +1,7 @@
+Reflection:
+1. The most difficult part of this was setting up the connection between the lakebase instance and application. I didn't use the boiler plate provided and instead used a nodjs stack. Getting the permissions to access was a bit difficult.
+2. It provides an immediate store for transactional data.
+3. Next I would add a priority flag, so that tickets in the queue are prioritized. Also would add an attachment feature to save files that support the tickets creation.
+
+URLS: https://ticketing-system-7474644124368754.aws.databricksapps.com/
+REPO: 

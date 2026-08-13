@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticketing System - Build Required</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a24 100%);
+            color: #e4e4e7;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 600px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #b537f2, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        p {
+            font-size: 1.125rem;
+            line-height: 1.6;
+            color: #a1a1aa;
+            margin-bottom: 2rem;
+        }
+        .code-block {
+            background: #13131a;
+            border: 1px solid #27272a;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: left;
+            margin-bottom: 2rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            overflow-x: auto;
+        }
+        .code-block code {
+            color: #00d4ff;
+        }
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid #27272a;
+            border-top-color: #b537f2;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .note {
+            background: rgba(181, 55, 242, 0.1);
+            border: 1px solid #b537f2;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 2rem;
+            font-size: 0.938rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="spinner"></div>
+        <h1>Frontend Build Required</h1>
+        <p>The React frontend needs to be built before the app can be used.</p>
+        
+        <div class="code-block">
+            <div style="color: #71717a; margin-bottom: 0.5rem;"># On your local machine:</div>
+            <code>cd ticketing-app</code><br>
+            <code>npm install</code><br>
+            <code>npm run build</code><br>
+        </div>
+        
+        <p style="font-size: 1rem;">After building, the static files will be generated in <code style="color: #00d4ff;">backend/static/</code> and the app will work.</p>
+        
+        <div class="note">
+            <strong style="color: #b537f2;">📝 Note:</strong> Node.js/npm is not available in Databricks compute. The frontend must be built locally or in a CI/CD pipeline.
+        </div>
+    </div>
+</body>
+</html>

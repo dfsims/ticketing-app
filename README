@@ -1,0 +1,128 @@
+# Ticketing System App
+
+A full-stack ticketing application using React frontend with FastAPI backend, integrated with Databricks Lakebase Postgres for data persistence.
+
+## Architecture
+
+```
+React Frontend (TypeScript + Vite)
+    ↓ API calls
+FastAPI Backend (Python)
+    ↓ Database operations
+Lakebase Postgres Database
+    ↓ Deployment
+Databricks Apps
+```
+
+## Setup
+
+### 1. Configure Lakebase Connection
+
+Create a Databricks secret containing your Lakebase connection URL:
+
+```bash
+# Using Databricks CLI
+databricks secrets create-scope lakebase
+databricks secrets put-secret lakebase Lakebase_url
+```
+
+The Lakebase URL should be in PostgreSQL connection string format:
+```
+postgresql://username:password@host:port/database?sslmode=require
+```
+
+**Alternative:** You can also use a different secret scope name (e.g., `app-secrets`). The app will try these scopes:
+1. `lakebase` (default)
+2. `app-secrets` (fallback)
+3. `LAKEBASE_URL` environment variable (last resort)
+
+### 2. Install Python dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Install Node.js dependencies:
+```bash
+npm install
+```
+
+## Development
+
+1. **Start FastAPI backend:**
+```bash
+uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+2. **In another terminal, start React dev server:**
+```bash
+npm run dev
+```
+
+- Frontend: http://localhost:5173 (with API proxy)
+- Backend API docs: http://localhost:8000/docs
+
+## Production
+
+Build and run:
+```bash
+npm run build
+uvicorn backend.main:app --host 0.0.0.0 --port 8000
+```
+
+## Databricks Apps Deployment
+
+Configured for Databricks Apps with `app.yaml`. Uses `DATABRICKS_APP_PORT` environment variable automatically.
+
+## API Endpoints
+
+### Health & Status
+- `GET /api/hello` - Hello world message
+- `GET /api/health` - Health check
+- `GET /docs` - FastAPI interactive documentation
+
+### Ticket Management
+- `POST /api/tickets` - Create a new ticket
+  - Body: `{"title": "string", "created_by": "string"}`
+- `GET /api/tickets` - List all tickets (supports `?status=` filter)
+- `GET /api/tickets/{ticket_id}` - Get specific ticket
+- `PATCH /api/tickets/{ticket_id}` - Update ticket
+  - Body: `{"title": "string", "status": "open|in_progress|resolved|closed"}`
+- `DELETE /api/tickets/{ticket_id}` - Delete ticket
+- `GET /api/tickets/stats/summary` - Get ticket statistics
+- `POST /api/tickets/{ticket_id}/messages` - Add a message to a ticket
+  - Body: `{"message": "string", "author": "string"}`
+- `GET /api/tickets/{ticket_id}/messages` - Get all messages for a ticket
+
+## Database Schema
+
+The app automatically creates the following tables on startup:
+
+```sql
+CREATE TABLE tickets (
+    ticket_id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    status VARCHAR(50) DEFAULT 'open',
+    created_by VARCHAR(100),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE ticket_messages (
+    message_id SERIAL PRIMARY KEY,
+    ticket_id INTEGER NOT NULL REFERENCES tickets(ticket_id) ON DELETE CASCADE,
+    message_text TEXT NOT NULL,
+    author VARCHAR(100),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+## Features
+
+- ✅ Full CRUD operations for tickets
+- ✅ Status tracking (open, in_progress, resolved, closed)
+- ✅ Conversation/messaging on each ticket
+- ✅ Ticket ownership tracking
+- ✅ Statistics and reporting
+- ✅ Automatic database schema initialization
+- ✅ Connection pooling for optimal performance
+- ✅ Secure credential management via Databricks Secrets
+- ✅ Foreign key relationships with cascade delete
